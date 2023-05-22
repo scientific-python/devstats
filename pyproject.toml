@@ -1,3 +1,7 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools", "wheel"]
+
 [project]
 name = "devstats"
 version = "0.1rc0.dev0"
@@ -21,7 +25,7 @@ dependencies = [
 ]
 
 [project.scripts]
-query = "query.__main__:main"
+devstats = "devstats.__main__:main"
 
 [project.optional-dependencies]
 lint = ["pre-commit >= 3.r32"]

@@ -1,30 +1,37 @@
 import os
 import requests
+import sys
 import json
 import click
 
-token = os.environ["GRAPH_API_KEY"]
+try:
+    token = os.environ["GRAPH_API_KEY"]
+except KeyError:
+    print("You need to set GRAPH_API_KEY")
+    print("But you shouldn't use this yet.")
+    sys.exit()
+
 endpoint = r"https://api.github.com/graphql"
-headers = {"Authorization": "bearer {}".format(token)}
+headers = {"Authorization": f"bearer {token}"}
 
 
 def load_query_from_file(fname, repo_owner="numpy", repo_name="numpy"):
     """
     Load an 'issue' query from file and set the target repository, where
     the target repository has the format:
-    
+
     https://github.com/<repo_owner>/<repo_name>
-    
+
     Parameters
     ----------
     fname : str
-        Path to a text file containing a valid issue query according to the 
+        Path to a text file containing a valid issue query according to the
         GitHub GraphQL schema.
     repo_owner : str
         Owner of target repository on GitHub. Default is 'numpy'.
     repo_name : str
         Name of target repository on GitHub. Default is 'numpy'.
-    
+
     Returns
     -------
     query : str
@@ -36,7 +43,7 @@ def load_query_from_file(fname, repo_owner="numpy", repo_name="numpy"):
     for general GitHub GraphQL queries. See ``examples/`` for some valid
     templated issue queries.
     """
-    with open(fname, "r") as fh:
+    with open(fname) as fh:
         query = fh.read()
         # Set target repo from template
         query = query.replace("_REPO_OWNER_", repo_owner)
@@ -85,9 +92,10 @@ def send_query(query, query_type, cursor=None):
         cursor_ind = query.find(cursor_insertion_key) + len(cursor_insertion_key)
         query = query[:cursor_ind] + f'after:"{cursor}", ' + query[cursor_ind:]
     # Build request payload
-    payload = {'query' : ''.join(query.split('\n'))}
+    payload = {"query": "".join(query.split("\n"))}
     response = requests.post(endpoint, json=payload, headers=headers)
     return json.loads(response.content)
+
 
 def get_all_responses(query, query_type):
     """
@@ -106,20 +114,21 @@ def get_all_responses(query, query_type):
     print("Done.")
     return data
 
+
 def parse_single_query(data, query_type):
     """
     Parse the data returned by `send_query`
 
     .. warning::
-       
+
        Like `send_query`, the logic here depends on the specific structure
        of the query (e.g. it must be an issue or PR query, and must have a
        total count).
     """
     try:
-        total_count = data['data']['repository'][query_type]['totalCount']
-        data = data['data']['repository'][query_type]['edges']
-        last_cursor = data[-1]['cursor']
+        total_count = data["data"]["repository"][query_type]["totalCount"]
+        data = data["data"]["repository"][query_type]["edges"]
+        last_cursor = data[-1]["cursor"]
     except KeyError as e:
         print(data)
         raise e
@@ -182,14 +191,14 @@ class GithubGrabber:
 
 
 @click.command()
-@click.argument('repo_owner')
-@click.argument('repo_name')
+@click.argument("repo_owner")
+@click.argument("repo_name")
 def main(repo_owner, repo_name):
     """Download and save issue and pr data for `repo_owner`/`repo_name`."""
     # Download issue data
     issues = GithubGrabber(
-        'query_examples/issue_activity_since_date.gql',
-        'issues',
+        "query_examples/issue_activity_since_date.gql",
+        "issues",
         repo_owner=repo_owner,
         repo_name=repo_name,
     )
@@ -197,14 +206,13 @@ def main(repo_owner, repo_name):
     issues.dump(f"{repo_name}_issues.json")
     # Download PR data
     prs = GithubGrabber(
-        'query_examples/pr_data_query.gql',
-        'pullRequests',
+        "query_examples/pr_data_query.gql",
+        "pullRequests",
         repo_owner=repo_owner,
         repo_name=repo_name,
     )
     prs.get()
     prs.dump(f"{repo_name}_prs.json")
-
 
 
 if __name__ == "__main__":
