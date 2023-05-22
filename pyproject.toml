@@ -1,0 +1,33 @@
+[project]
+name = "devstats"
+version = "0.1rc0.dev0"
+requires-python = ">=3.10"
+description = "Developer tool for scientific Python libraries"
+license = {file = "LICENSE"}
+maintainers = [
+  {name = "Scientific Python", email = "devstats@discuss.scientific-python.org"}
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python"
+]
+dependencies = [
+  "click",
+  "requests",
+  "jupyter",
+  "notebook",
+  "numpy",
+  "networkx",
+]
+
+[project.scripts]
+query = "query.__main__:main"
+
+[project.optional-dependencies]
+lint = ["pre-commit >= 3.r32"]
+
+[project.urls]
+homepage = "https://github.com/scientific-python/devstats"
+
+[tool.setuptools.packages.find]
+include = ["devstats*"]
