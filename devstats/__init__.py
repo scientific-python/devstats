@@ -1,9 +1,16 @@
 import os
 import requests
+import sys
 import json
 import click
 
-token = os.environ["GRAPH_API_KEY"]
+try:
+    token = os.environ["GRAPH_API_KEY"]
+except KeyError:
+    print("You need to set GRAPH_API_KEY")
+    print("But you shouldn't use this yet.")
+    sys.exit()
+
 endpoint = r"https://api.github.com/graphql"
 headers = {"Authorization": f"bearer {token}"}
 
