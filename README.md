@@ -2,7 +2,7 @@
 
 This repository holds the devstats package. devstats uses the github API to
 generate developer statistics and a developer statistics report on a specified
-project. 
+project.
 
 ## OAuth key for accessing GitHub
 
@@ -17,9 +17,9 @@ Then, when you want to use the code: `export GRAPH_API_KEY=<yourkey>`
 
 ## Query script
 
-The ``query.py`` script can be used to collect data for other projects like
-so: ``python query.py <repo_owner> <repo_name>`` where ``repo_owner`` and
-``repo_name`` are the names of the **org** and **repo** on GitHub, respectively.
+The `query.py` script can be used to collect data for other projects like
+so: `python query.py <repo_owner> <repo_name>` where `repo_owner` and
+`repo_name` are the names of the **org** and **repo** on GitHub, respectively.
 
 First you need to install the required Python packages:
 
@@ -27,7 +27,7 @@ First you need to install the required Python packages:
 pip install -r requirements.txt
 ```
 
-For example, to download the latest data for ``pandas``:
+For example, to download the latest data for `pandas`:
 
 ```bash
 python query.py pandas-dev pandas
