@@ -25,10 +25,10 @@ dependencies = [
 ]
 
 [project.scripts]
-devstats = "devstats.__main__:main"
+devstats = "devstats.__init__:main"
 
 [project.optional-dependencies]
-lint = ["pre-commit >= 3.r32"]
+lint = ["pre-commit >= 3.3.2"]
 
 [project.urls]
 homepage = "https://github.com/scientific-python/devstats"
