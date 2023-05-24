@@ -1,7 +1,7 @@
 # devstats
 
-This repository holds the devstats package. devstats uses the github API to
-generate developer statistics and a developer statistics report on a specified
+This repository holds the devstats package. devstats is a command line tool that uses the GitHub GraphQL API to
+generate developer statistics and a developer statistics report for a specified
 project.
 
 ## OAuth key for accessing GitHub
@@ -12,8 +12,11 @@ you need a personal access token with `public_repo` permission to access the Gra
 This code expects the personal access token to be in the environment variable
 `GRAPH_API_KEY`.
 
-You can [create a personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) on GitHub and save it somewhere you trust.
-Then, when you want to use the code: `export GRAPH_API_KEY=<yourkey>`
+You can [create a personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) on GitHub. Save the token in a trusted location.
+
+Finally, add the token to your environment using:
+
+`export GRAPH_API_KEY=<yourkey>`
 
 ## Query script
 
@@ -27,8 +30,13 @@ First you need to install the required Python packages:
 pip install -r requirements.txt
 ```
 
-For example, to download the latest data for `pandas`:
+To download the latest data for `pandas` use the following command:
 
 ```bash
-python query.py pandas-dev pandas
+devstats query.py pandas-dev pandas
 ```
+
+The command will collect information from GitHub and generate two output files in the same directory where you ran it as follows:
+
+packagename_issues.json: this file contains information about issues for the repository of interest.  
+packagename_PRs.json: this file contains information associated with pull requests for the repository of interest.
