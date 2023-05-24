@@ -113,7 +113,11 @@ def get_all_responses(query, query_type):
         rdata = send_query(query, query_type, cursor=last_cursor)
         pdata, last_cursor, _ = parse_single_query(rdata, query_type)
         data.extend(pdata)
-        print(f"OK\nRetrieving {len(data)} out of {total_count} values...", end="", flush=True)
+        print(
+            f"OK\nRetrieving {len(data)} out of {total_count} values...",
+            end="",
+            flush=True,
+        )
     print("OK")
     return data
 
@@ -190,7 +194,7 @@ class GithubGrabber:
             raise ValueError("raw_data is currently empty, nothing to dump")
 
         with open(outfile, "w") as outf:
-            print(f'Writing [{outfile}]')
+            print(f"Writing [{outfile}]")
             json.dump(self.raw_data, outf)
 
 
@@ -200,9 +204,7 @@ class GithubGrabber:
 def main(repo_owner, repo_name):
     """Download and save issue and pr data for `repo_owner`/`repo_name`."""
 
-    query_files = glob(
-        os.path.join(os.path.dirname(__file__), 'queries/*.gql')
-    )
+    query_files = glob(os.path.join(os.path.dirname(__file__), "queries/*.gql"))
 
     for n, query in enumerate(query_files):
         if n != 0:
@@ -212,8 +214,9 @@ def main(repo_owner, repo_name):
         # Parse query type from gql
         gql = open(query).read()
         qtype_match = re.match(
-            'query\s*{\s*repository\(.*?\)\s*{\s*(pullRequests|issues)',
-            gql, flags=re.MULTILINE
+            r"query\s*{\s*repository\(.*?\)\s*{\s*(pullRequests|issues)",
+            gql,
+            flags=re.MULTILINE,
         )
         if qtype_match is None:
             print(f"Could not determine gql query type for {query}")
@@ -229,7 +232,7 @@ def main(repo_owner, repo_name):
             repo_name=repo_name,
         )
         data.get()
-        ftype = {'issues': 'issues', 'pullRequests': 'PRs'}
+        ftype = {"issues": "issues", "pullRequests": "PRs"}
         data.dump(f"{repo_name}_{ftype.get(qtype, qtype)}.json")
 
 
