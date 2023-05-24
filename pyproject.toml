@@ -25,7 +25,7 @@ dependencies = [
 ]
 
 [project.scripts]
-devstats = "devstats.__init__:main"
+devstats = "devstats.__main__:main"
 
 [project.optional-dependencies]
 lint = ["pre-commit >= 3.3.2"]
