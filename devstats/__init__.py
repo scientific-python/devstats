@@ -3,6 +3,8 @@ import requests
 import sys
 import json
 import click
+from glob import glob
+import re
 
 try:
     token = os.environ["GRAPH_API_KEY"]
@@ -102,16 +104,21 @@ def get_all_responses(query, query_type):
     Helper function to bypass GitHub GraphQL API node limit.
     """
     # Get data from a single response
+    print(f"Retrieving first page...", end="", flush=True)
     initial_data = send_query(query, query_type)
     data, last_cursor, total_count = parse_single_query(initial_data, query_type)
-    print(f"Retrieving {len(data)} out of {total_count} values...")
+
     # Continue requesting data (with pagination) until all are acquired
     while len(data) < total_count:
         rdata = send_query(query, query_type, cursor=last_cursor)
         pdata, last_cursor, _ = parse_single_query(rdata, query_type)
         data.extend(pdata)
-        print(f"Retrieving {len(data)} out of {total_count} values...")
-    print("Done.")
+        print(
+            f"OK\nRetrieving {len(data)} out of {total_count} values...",
+            end="",
+            flush=True,
+        )
+    print("OK")
     return data
 
 
@@ -187,6 +194,7 @@ class GithubGrabber:
             raise ValueError("raw_data is currently empty, nothing to dump")
 
         with open(outfile, "w") as outf:
+            print(f"Writing [{outfile}]")
             json.dump(self.raw_data, outf)
 
 
@@ -195,24 +203,37 @@ class GithubGrabber:
 @click.argument("repo_name")
 def main(repo_owner, repo_name):
     """Download and save issue and pr data for `repo_owner`/`repo_name`."""
-    # Download issue data
-    issues = GithubGrabber(
-        "query_examples/issue_activity_since_date.gql",
-        "issues",
-        repo_owner=repo_owner,
-        repo_name=repo_name,
-    )
-    issues.get()
-    issues.dump(f"{repo_name}_issues.json")
-    # Download PR data
-    prs = GithubGrabber(
-        "query_examples/pr_data_query.gql",
-        "pullRequests",
-        repo_owner=repo_owner,
-        repo_name=repo_name,
-    )
-    prs.get()
-    prs.dump(f"{repo_name}_prs.json")
+
+    query_files = glob(os.path.join(os.path.dirname(__file__), "queries/*.gql"))
+
+    for n, query in enumerate(query_files):
+        if n != 0:
+            print()
+
+        print(f"Query: [{os.path.basename(query)}] on [{repo_owner}/{repo_name}]")
+        # Parse query type from gql
+        gql = open(query).read()
+        qtype_match = re.match(
+            r"query\s*{\s*repository\(.*?\)\s*{\s*(pullRequests|issues)",
+            gql,
+            flags=re.MULTILINE,
+        )
+        if qtype_match is None:
+            print(f"Could not determine gql query type for {query}")
+            sys.exit(-1)
+        else:
+            qtype = qtype_match.group(1)
+
+        qname, qext = os.path.splitext(query)
+        data = GithubGrabber(
+            query,
+            qtype,
+            repo_owner=repo_owner,
+            repo_name=repo_name,
+        )
+        data.get()
+        ftype = {"issues": "issues", "pullRequests": "PRs"}
+        data.dump(f"{repo_name}_{ftype.get(qtype, qtype)}.json")
 
 
 if __name__ == "__main__":
