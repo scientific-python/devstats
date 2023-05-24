@@ -38,5 +38,5 @@ devstats query.py pandas-dev pandas
 
 The command will collect information from GitHub and generate two output files in the same directory where you ran it as follows:
 
-packagename_issues.json: this file contains information about issues for the repository of interest.  
+packagename_issues.json: this file contains information about issues for the repository of interest.
 packagename_PRs.json: this file contains information associated with pull requests for the repository of interest.
