@@ -35,3 +35,6 @@ homepage = "https://github.com/scientific-python/devstats"
 
 [tool.setuptools.packages.find]
 include = ["devstats*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.gql"]
