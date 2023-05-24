@@ -8,6 +8,7 @@ import click
 import requests
 
 from .query import GithubGrabber
+from .publish import publisher
 
 
 @click.group()
@@ -62,6 +63,7 @@ def query(repo_owner, repo_name):
 
 
 @cli.command("publish")
-def publish():
+@click.argument("project")
+def publish(project):
     """Generate myst report for `repo_owner`/`repo_name`."""
-    click.echo("publish called")
+    publisher(project)

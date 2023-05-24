@@ -37,4 +37,4 @@ homepage = "https://github.com/scientific-python/devstats"
 include = ["devstats*"]
 
 [tool.setuptools.package-data]
-"*" = ["*.gql"]
+"*" = ["*.gql", "*.md"]
