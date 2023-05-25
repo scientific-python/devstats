@@ -3,15 +3,25 @@ import os
 import re
 import sys
 from glob import glob
+import collections
 
 import click
 import requests
 
 from .query import GithubGrabber
-from .publish import publish
+from .publish import template, publish
 
 
-@click.group()
+class OrderedGroup(click.Group):
+    def __init__(self, name=None, commands=None, **attrs):
+        super().__init__(name, commands, **attrs)
+        self.commands = commands or collections.OrderedDict()
+
+    def list_commands(self, ctx):
+        return self.commands
+
+
+@click.group(cls=OrderedGroup)
 def cli():
     pass
 
@@ -20,7 +30,7 @@ def cli():
 @click.argument("repo_owner")
 @click.argument("repo_name")
 def query(repo_owner, repo_name):
-    """Download and save issue and pr data for `repo_owner`/`repo_name`."""
+    """Download and save issue and pr data for `repo_owner`/`repo_name`"""
 
     try:
         token = os.environ["GRAPH_API_KEY"]
@@ -62,4 +72,5 @@ def query(repo_owner, repo_name):
         data.dump(f"{repo_name}_{ftype.get(qtype, qtype)}.json")
 
 
+cli.add_command(template)
 cli.add_command(publish)
