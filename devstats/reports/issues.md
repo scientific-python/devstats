@@ -35,7 +35,6 @@ is {glue:text}`{{ project }}_new_issue_median_lifetime`.
 % TODO: for any remaining static/mpl plots, set default params for things
 % like fontsize in a mplstyle file.
 
-
 %TODO: query_date should be synced up with the query that generates data, rather
 %than specified manually
 
