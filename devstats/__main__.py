@@ -8,7 +8,7 @@ import click
 import requests
 
 from .query import GithubGrabber
-from .publish import publisher
+from .publish import publish
 
 
 @click.group()
@@ -62,8 +62,4 @@ def query(repo_owner, repo_name):
         data.dump(f"{repo_name}_{ftype.get(qtype, qtype)}.json")
 
 
-@cli.command("publish")
-@click.argument("project")
-def publish(project):
-    """Generate myst report for `repo_owner`/`repo_name`."""
-    publisher(project)
+cli.add_command(publish)
