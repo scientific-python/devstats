@@ -55,7 +55,7 @@ def publish(project, templatedir, outdir):
     print(f"Templating [{project}] report from [{templatedir}] to [{outdir}]...")
 
     templatedir = f"{templatedir}/{project}"
-    template_files = glob(f"{templatedir}/*.md")
+    template_files = [f"{templatedir}/index.md"]
 
     for f in template_files:
         with open(f) as fh:
