@@ -1,7 +1,8 @@
 ---
+file_format: mystnb
 kernelspec:
   display_name: Python 3
-  name: ipython3
+  name: python3
 ---
 
 # `{{ project }}`

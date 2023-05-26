@@ -64,9 +64,6 @@ def publish(project, templatedir, outdir):
         dest = f"{dest_dir}/{os.path.basename(f)}"
         with open(dest, "w") as fh:
             print(f" - {dest}")
-            for v in variables:
-                template = template.replace("{{ " + v + " }}", variables[v])
-
             # Handle myst includes
             template = re.sub(
                 r"```{include}\s*(.*)\s*```",
@@ -74,5 +71,8 @@ def publish(project, templatedir, outdir):
                 template,
                 flags=re.MULTILINE,
             )
+
+            for v in variables:
+                template = template.replace("{{ " + v + " }}", variables[v])
 
             fh.write(template)
