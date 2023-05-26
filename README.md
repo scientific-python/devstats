@@ -1,5 +1,8 @@
 # devstats
 
+
+TEST
+
 This repository holds the `devstats` package. `devstats` is a Python command line tool that uses the GitHub GraphQL API to
 generate developer statistics and a developer statistics report for a specified
 project.
