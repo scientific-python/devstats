@@ -54,7 +54,8 @@ def publish(project, templatedir, outdir):
 
     print(f"Templating [{project}] report from [{templatedir}] to [{outdir}]...")
 
-    template_files = glob(f"{templatedir}/{project}/*.md")
+    templatedir = f"{templatedir}/{project}"
+    template_files = glob(f"{templatedir}/*.md")
 
     for f in template_files:
         with open(f) as fh:
@@ -69,7 +70,7 @@ def publish(project, templatedir, outdir):
             # Handle myst includes
             template = re.sub(
                 r"```{include}\s*(.*)\s*```",
-                functools.partial(_include_file, dest_dir),
+                functools.partial(_include_file, templatedir),
                 template,
                 flags=re.MULTILINE,
             )
