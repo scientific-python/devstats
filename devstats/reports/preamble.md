@@ -26,9 +26,6 @@ warnings.filterwarnings(
 ```
 
 ```{code-cell}
----
-tags: [remove-cell]
----
 # For interactive plots
 from bokeh.plotting import figure, show, output_notebook
 from bokeh.models import TeX
