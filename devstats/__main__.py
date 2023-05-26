@@ -29,8 +29,16 @@ def cli():
 @cli.command("query")
 @click.argument("repo_owner")
 @click.argument("repo_name")
-def query(repo_owner, repo_name):
+@click.option(
+    "-o",
+    "--outdir",
+    default="devstats-data",
+    help="Output directory",
+    show_default=True,
+)
+def query(repo_owner, repo_name, outdir):
     """Download and save issue and pr data for `repo_owner`/`repo_name`"""
+    os.makedirs(outdir, exist_ok=True)
 
     try:
         token = os.environ["GRAPH_API_KEY"]
@@ -69,7 +77,7 @@ def query(repo_owner, repo_name):
         )
         data.get()
         ftype = {"issues": "issues", "pullRequests": "PRs"}
-        data.dump(f"{repo_name}_{ftype.get(qtype, qtype)}.json")
+        data.dump(f"{outdir}/{repo_name}_{ftype.get(qtype, qtype)}.json")
 
 
 cli.add_command(template)
