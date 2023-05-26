@@ -1,4 +1,4 @@
-```{code-cell} ipython3
+```{code-cell}
 ---
 tags: [remove-cell]
 ---
@@ -25,7 +25,7 @@ warnings.filterwarnings(
 )
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 tags: [remove-cell]
 ---

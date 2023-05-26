@@ -42,7 +42,7 @@ is {glue:text}`{{ project }}_new_issue_median_lifetime`.
 query_date = np.datetime64("2020-01-01 00:00:00")
 
 # Load data
-with open("../devstats-data/{{ project }}_issues.json", "r") as fh:
+with open("devstats-data/{{ project }}_issues.json", "r") as fh:
     issues = [item["node"] for item in json.loads(fh.read())]
 
 glue("{{ project }}_query_date", str(query_date.astype("M8[D]")))
