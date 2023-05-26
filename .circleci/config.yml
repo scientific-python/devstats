@@ -53,4 +53,4 @@ jobs:
             make html
 
       - store_artifacts:
-          path: _build/html
+          path: devstats.scientific-python.org/_build/html
