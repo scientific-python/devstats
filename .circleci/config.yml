@@ -1,0 +1,56 @@
+# See: https://circleci.com/docs/2.0/language-python/
+
+version: 2.1
+jobs:
+  documentation:
+    docker:
+      - image: cimg/python:3.11
+
+    steps:
+      - checkout
+
+      - run:
+          name: Update apt-get
+          command: |
+            sudo apt-get update
+
+      - restore_cache:
+          keys:
+            - pip-cache-v1
+
+      - run:
+          name: Clone website
+          command: git clone git@github.com:scientific-python/devstats.scientific-python.org.git
+
+      - run:
+          name: Install Python dependencies
+          command: |
+            python3 -m venv venv
+            source venv/bin/activate
+            pip install --upgrade pip wheel setuptools
+            pip install -r devstats.scientific-python.org/requirements.txt
+            pip list
+
+      - save_cache:
+          key: pip-cache-v1
+          paths:
+            - ~/.cache/pip
+
+      - run:
+          name: Install
+          command: |
+            source venv/bin/activate
+            pip install -e .
+            pip list
+
+      - run:
+          name: Build docs
+          command: |
+            # NOTE: bad interaction w/ blas multithreading on circleci
+            export OMP_NUM_THREADS=1
+            source venv/bin/activate
+            cd devstats.scientific-python.org
+            make html
+
+      - store_artifacts:
+          path: _build/html

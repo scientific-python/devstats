@@ -9,7 +9,7 @@ def publisher(project):
     basedir = os.path.dirname(__file__)
     with open(os.path.join(basedir, "template.md")) as fh:
         template = fh.read()
- 
+
     issues = glob(os.path.join(basedir, "reports/issues/*.md"))
     for issue in issues:
         with open(issue) as fh:

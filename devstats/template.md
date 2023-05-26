@@ -73,7 +73,6 @@ glue("{{ project }}_query_date", str(query_date.astype("M8[D]")))
 
 {{ first_responders }}
 
-
 ## Pull Requests
 
 ```{code-cell} ipython3
