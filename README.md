@@ -1,5 +1,7 @@
 # devstats
 
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/scientific-python/devstats/main.svg)](https://results.pre-commit.ci/latest/github/scientific-python/devstats/main)
+
 This repository holds the `devstats` package. `devstats` is a Python command line tool that uses the GitHub GraphQL API to
 generate developer statistics and a developer statistics report for a specified
 project.
