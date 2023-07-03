@@ -28,7 +28,8 @@ dependencies = [
 devstats = "devstats.__main__:cli"
 
 [project.optional-dependencies]
-lint = ["pre-commit >= 3.3.2"]
+lint = ["pre-commit == 3.3.2"]
+dev = ["changelist == 0.1"]
 
 [project.urls]
 homepage = "https://github.com/scientific-python/devstats"
