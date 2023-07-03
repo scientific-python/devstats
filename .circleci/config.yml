@@ -50,6 +50,7 @@ jobs:
             export OMP_NUM_THREADS=1
             source venv/bin/activate
             cd devstats.scientific-python.org
+            git submodule update --init
             make html
 
       - store_artifacts:
