@@ -11,5 +11,5 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           api-token: ${{ secrets.DEVSTATS_CIRCLECI_TOKEN }}
-          artifact-path: 0/_build/html/index.html
+          artifact-path: 0/devstats.scientific-python.org/_build/html/index.html
           circleci-jobs: documentation
