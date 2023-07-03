@@ -1,10 +1,10 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.2"]
 
 [project]
 name = "devstats"
-version = "0.1rc1.dev0"
+version = "0.1rc3.dev0"
 requires-python = ">=3.8"
 description = "Developer tool for scientific Python libraries"
 license = {file = "LICENSE"}
@@ -28,7 +28,8 @@ dependencies = [
 devstats = "devstats.__main__:cli"
 
 [project.optional-dependencies]
-lint = ["pre-commit >= 3.3.2"]
+lint = ["pre-commit == 3.3.3"]
+dev = ["changelist == 0.1"]
 
 [project.urls]
 homepage = "https://github.com/scientific-python/devstats"
