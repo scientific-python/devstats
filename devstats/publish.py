@@ -14,7 +14,11 @@ import click
     "-o", "--outdir", default="source", help="Output directory", show_default=True
 )
 def template(project, outdir):
-    """Generate myst report template for `repo_owner`/`repo_name`"""
+    """Generate myst report templates
+
+    These templates are copied from `devstats`, and still need to be compiled
+    to substitute variables.
+    """
     os.makedirs(outdir, exist_ok=True)
     os.makedirs(os.path.join(outdir, project), exist_ok=True)
 
@@ -46,7 +50,19 @@ def _include_file(basedir, x):
     "-o", "--outdir", default="build", help="Output directory", show_default=True
 )
 def publish(project, templatedir, outdir):
-    """Compile templates into markdown files ready for sphinx / myst"""
+    """Compile templates (substitute variables) into markdown files ready for sphinx / myst
+
+    Include sections like the following are executed:
+
+    ```
+    {include} filename.md
+    ```
+
+    Thereafter, the following variables are substituted:
+
+      - `{{ project }}`: Name of the project
+
+    """
     os.makedirs(outdir, exist_ok=True)
     os.makedirs(os.path.join(outdir, project), exist_ok=True)
 
