@@ -3,15 +3,25 @@ import os
 import re
 import sys
 from glob import glob
+import collections
 
 import click
 import requests
 
 from .query import GithubGrabber
-from .publish import publisher
+from .publish import template, publish
 
 
-@click.group()
+class OrderedGroup(click.Group):
+    def __init__(self, name=None, commands=None, **attrs):
+        super().__init__(name, commands, **attrs)
+        self.commands = commands or collections.OrderedDict()
+
+    def list_commands(self, ctx):
+        return self.commands
+
+
+@click.group(cls=OrderedGroup)
 def cli():
     pass
 
@@ -19,8 +29,16 @@ def cli():
 @cli.command("query")
 @click.argument("repo_owner")
 @click.argument("repo_name")
-def query(repo_owner, repo_name):
-    """Download and save issue and pr data for `repo_owner`/`repo_name`."""
+@click.option(
+    "-o",
+    "--outdir",
+    default="devstats-data",
+    help="Output directory",
+    show_default=True,
+)
+def query(repo_owner, repo_name, outdir):
+    """Download and save issue and pr data for `repo_owner`/`repo_name`"""
+    os.makedirs(outdir, exist_ok=True)
 
     try:
         token = os.environ["GRAPH_API_KEY"]
@@ -59,11 +77,8 @@ def query(repo_owner, repo_name):
         )
         data.get()
         ftype = {"issues": "issues", "pullRequests": "PRs"}
-        data.dump(f"{repo_name}_{ftype.get(qtype, qtype)}.json")
+        data.dump(f"{outdir}/{repo_name}_{ftype.get(qtype, qtype)}.json")
 
 
-@cli.command("publish")
-@click.argument("project")
-def publish(project):
-    """Generate myst report for `repo_owner`/`repo_name`."""
-    publisher(project)
+cli.add_command(template)
+cli.add_command(publish)
