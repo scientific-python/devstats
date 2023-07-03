@@ -5,7 +5,7 @@
 Example `version number`
 
 - 1.8.dev0 # development version of 1.8 (release candidate 1)
-* 1.8rc1 # 1.8 release candidate 1
+- 1.8rc1 # 1.8 release candidate 1
 - 1.8rc2.dev0 # development version of 1.8 release candidate 2
 - 1.8 # 1.8 release
 - 1.9.dev0 # development version of 1.9 (release candidate 1)
