@@ -52,3 +52,15 @@ We use `pre-commit` to ensure the code style is consistent. To install pre-commi
 Once you have `pre-commit` installed, the code stylers and linters
 defined in the `pre-commit-config.yaml` will run each time you
 commit modified changes to git locally.
+
+### Precommit.ci Bot
+
+We use the pre-commit CI bot to run linting tests and to auto fix
+pull requests. How it works:
+
+- Pre-commit.ci will run the CI checks via a CI run in the PR.
+- After the PR is approved but before it's merged, a maintainer can run the bot to apply linting fixes via a commit to the PR. To run the bot write:
+
+`pre-commit.ci autofix` in a comment in the PR. This will trigger another CI run to double check that the linting / code style fixes are as expected. Then you can merge!
+
+NOTE: the pre-commit CI bot CI action will allow you to see what checks pass. It will also remind you of the command to autofix the code in the pr.
