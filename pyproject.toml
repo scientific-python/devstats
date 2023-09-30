@@ -4,10 +4,11 @@ requires = ["setuptools>=61.2"]
 
 [project]
 name = "devstats"
-version = "0.1rc3"
+version = "0.1rc4"
 requires-python = ">=3.8"
 description = "Developer tool for scientific Python libraries"
 license = {file = "LICENSE"}
+readme = "tREADME.md"
 maintainers = [
   {name = "Scientific Python", email = "devstats@discuss.scientific-python.org"}
 ]
