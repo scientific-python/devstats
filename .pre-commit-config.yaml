@@ -36,7 +36,7 @@ repos:
         args: [--prose-wrap=preserve]
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: ffb735bf0dc786a3a1e6b08043440b0bdef5bef8 # frozen: v3.13.0
+    rev: ac0449824100a11dbd880d9be7cfa55c4711b05a # frozen: v3.14.0
     hooks:
       - id: pyupgrade
         args: [--py38-plus]
