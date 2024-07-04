@@ -1,9 +1,8 @@
-import os
-import sys
-from glob import glob
-import shutil
-import re
 import functools
+import os
+import re
+import shutil
+from glob import glob
 
 import click
 

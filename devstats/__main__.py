@@ -1,15 +1,13 @@
-import json
+import collections
 import os
 import re
 import sys
 from glob import glob
-import collections
 
 import click
-import requests
 
+from .publish import publish, template
 from .query import GithubGrabber
-from .publish import template, publish
 
 
 class OrderedGroup(click.Group):

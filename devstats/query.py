@@ -1,8 +1,4 @@
 import json
-import os
-import re
-import sys
-from glob import glob
 
 import requests
 
@@ -98,7 +94,7 @@ def get_all_responses(query, query_type, headers):
     Helper function to bypass GitHub GraphQL API node limit.
     """
     # Get data from a single response
-    print(f"Retrieving first page...", end="", flush=True)
+    print("Retrieving first page...", end="", flush=True)
     initial_data = send_query(query, query_type, headers)
     data, last_cursor, total_count = parse_single_query(initial_data, query_type)
 
