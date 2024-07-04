@@ -2,7 +2,7 @@
 
 The following plot shows the "survival" of PRs over time.
 That means, the plot shows how many PRs are open for at least these many days.
-This is seperated into PRs that are merged and those that are still open
+This is separated into PRs that are merged and those that are still open
 (closed but unmerged PRs are not included currently).
 
 ```{code-cell} ipython3
