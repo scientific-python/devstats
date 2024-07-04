@@ -35,6 +35,9 @@ dev = ["changelist == 0.5"]
 [project.urls]
 homepage = "https://github.com/scientific-python/devstats"
 
+[tool.changelist]
+ignored_user_logins = ["dependabot[bot]", "pre-commit-ci[bot]", "web-flow"]
+
 [tool.setuptools.packages.find]
 include = ["devstats*"]
 
