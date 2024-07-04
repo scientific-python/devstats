@@ -75,6 +75,13 @@ ignore = [
   "T201",     # `print` found
 ]
 
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+xfail_strict = true
+filterwarnings = ["error"]
+log_cli_level = "info"
+
 [tool.setuptools.packages.find]
 include = ["devstats*"]
 
