@@ -1,5 +1,6 @@
 name: Build Wheel and Release
 on:
+  workflow_dispatch:
   push:
     tags:
       - v*
