@@ -20,16 +20,16 @@ Finally, add the token to your environment using:
 
 `export GRAPH_API_KEY=<yourkey>`
 
-## Query script
+## Query command
 
-The `query.py` script can be used to collect data for other projects like
-so: `devstats query.py <repo_owner> <repo_name>` where `repo_owner` and
+The `query` command can be used to collect data for other projects like
+so: `devstats query <repo_owner> <repo_name>` where `repo_owner` and
 `repo_name` are the names of the **org** and **repo** on GitHub, respectively.
 
 To download the latest data for `pandas` use the following command:
 
 ```bash
-devstats query.py pandas-dev pandas
+devstats query pandas-dev pandas
 ```
 
 The command will collect information from GitHub and generate two output files in the same directory where you ran it as follows:
