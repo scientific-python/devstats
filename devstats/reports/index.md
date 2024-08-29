@@ -48,7 +48,7 @@ glue("devstats-data/{{ project }}_query_date", str(query_date.astype("M8[D]")))
 ---
 tags: [hide-input]
 ---
-with open("devstats-data/{{ project }}_prs.json", "r") as fh:
+with open("devstats-data/{{ project }}_PRs.json", "r") as fh:
     prs = [item["node"] for item in json.loads(fh.read())]
 
 # Filters
