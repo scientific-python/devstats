@@ -86,9 +86,19 @@ def send_query(query, query_type, headers, cursor=None):
         query = query[:cursor_ind] + f'after:"{cursor}", ' + query[cursor_ind:]
     # Build request payload
     payload = {"query": "".join(query.split("\n"))}
-    response = requests.post(endpoint, json=payload, headers=headers)
+
+    retry = True
+    while retry:
+        response = requests.post(endpoint, json=payload, headers=headers)
+        data = json.loads(response.content)
+        if "exceeded a secondary rate limit" in data.get("message", ""):
+            print("Secondary rate limit exceeded; sleeping 2mins")
+            time.sleep(2 * 60)
+        else:
+            retry = False
+
     rate_limit = {h: response.headers[h] for h in ("x-ratelimit-remaining",)}
-    return {**json.loads(response.content), **rate_limit}
+    return {**data, **rate_limit}
 
 
 def get_all_responses(query, query_type, headers):
