@@ -1,4 +1,5 @@
 import json
+import time
 
 import requests
 
@@ -86,29 +87,33 @@ def send_query(query, query_type, headers, cursor=None):
     # Build request payload
     payload = {"query": "".join(query.split("\n"))}
     response = requests.post(endpoint, json=payload, headers=headers)
-    return json.loads(response.content)
+    rate_limit = {h: response.headers[h] for h in ("x-ratelimit-remaining",)}
+    return {**json.loads(response.content), **rate_limit}
 
 
 def get_all_responses(query, query_type, headers):
     """
     Helper function to bypass GitHub GraphQL API node limit.
     """
-    # Get data from a single response
-    print("Retrieving first page...", end="", flush=True)
-    initial_data = send_query(query, query_type, headers)
-    data, last_cursor, total_count = parse_single_query(initial_data, query_type)
-
-    # Continue requesting data (with pagination) until all are acquired
+    data = []
+    total_count = 1
+    last_cursor = None
+    rdata = {}
+    ratelimit_remaining = 10
     while len(data) < total_count:
+        if ratelimit_remaining < 10:
+            print("Close to hitting rate limit; sleeping 30s")
+            time.sleep(30)
+
+        print("Fetching...", end="", flush=True)
         rdata = send_query(query, query_type, headers, cursor=last_cursor)
-        pdata, last_cursor, _ = parse_single_query(rdata, query_type)
+        ratelimit_remaining = int(rdata["x-ratelimit-remaining"])
+        pdata, last_cursor, total_count = parse_single_query(rdata, query_type)
         data.extend(pdata)
         print(
-            f"OK\nRetrieving {len(data)} out of {total_count} values...",
-            end="",
+            f"OK [{len(data)}/{total_count}] [ratelimit: {ratelimit_remaining}]",
             flush=True,
         )
-    print("OK")
     return data
 
 
