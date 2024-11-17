@@ -87,15 +87,22 @@ def send_query(query, query_type, headers, cursor=None):
     # Build request payload
     payload = {"query": "".join(query.split("\n"))}
 
-    retry = True
-    while retry:
-        response = requests.post(endpoint, json=payload, headers=headers)
-        data = json.loads(response.content)
-        if "exceeded a secondary rate limit" in data.get("message", ""):
-            print("Secondary rate limit exceeded; sleeping 2mins")
-            time.sleep(2 * 60)
+    retries = 10
+    while retries > 0:
+        try:
+            response = requests.post(endpoint, json=payload, headers=headers)
+        except requests.exceptions.ChunkedEncodingError as e:
+            print(f"`requests` ChunkedEncodingError: {e}; retrying.")
+            retries -= 1
         else:
-            retry = False
+            data = json.loads(response.content)
+            if "exceeded a secondary rate limit" in data.get("message", ""):
+                print("GitHub secondary rate limit exceeded; retrying after 2mins")
+                time.sleep(2 * 60)
+                retries -= 1
+            else:
+                # Success
+                retries = 0
 
     rate_limit = {h: response.headers[h] for h in ("x-ratelimit-remaining",)}
     return {**data, **rate_limit}
