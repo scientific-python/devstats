@@ -107,7 +107,11 @@ def send_query(query, query_type, headers, cursor=None):
                 # Success
                 retries = 0
 
-    rate_limit = {h: response.headers[h] for h in ("x-ratelimit-remaining",)}
+    rate_limit = {
+        h: response.headers[h]
+        for h in ("x-ratelimit-remaining",)
+        if h in response.headers
+    }
     return {**data, **rate_limit}
 
 
