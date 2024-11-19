@@ -127,9 +127,13 @@ def get_all_responses(query, query_type, headers):
 
         print("Fetching...", end="", flush=True)
         rdata = send_query(query, query_type, headers, cursor=last_cursor)
-        ratelimit_remaining = int(rdata["x-ratelimit-remaining"])
-        pdata, last_cursor, total_count = parse_single_query(rdata, query_type)
+        try:
+            pdata, last_cursor, total_count = parse_single_query(rdata, query_type)
+        except KeyError:
+            print("Malformed response; repeating request")
+            continue
         data.extend(pdata)
+        ratelimit_remaining = int(rdata["x-ratelimit-remaining"])
         print(
             f"OK [{len(data)}/{total_count}] [ratelimit: {ratelimit_remaining}]",
             flush=True,
@@ -152,7 +156,7 @@ def parse_single_query(data, query_type):
         data = data["data"]["repository"][query_type]["edges"]
         last_cursor = data[-1]["cursor"]
     except KeyError as e:
-        print(data)
+        print(f"Error parsing response: {data}")
         raise e
     return data, last_cursor, total_count
 
