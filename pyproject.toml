@@ -8,7 +8,7 @@ version = "0.2rc0.dev0"
 requires-python = ">=3.8"
 description = "Developer tool for scientific Python libraries"
 license = {file = "LICENSE"}
-readme = "tREADME.md"
+readme = "README.md"
 maintainers = [
   {name = "Scientific Python", email = "devstats@discuss.scientific-python.org"}
 ]
@@ -19,16 +19,18 @@ classifiers = [
 dependencies = [
   "click",
   "requests",
-  "jupyter",
-  "notebook",
-  "numpy",
-  "networkx",
 ]
 
 [project.scripts]
 devstats = "devstats.__main__:cli"
 
 [project.optional-dependencies]
+publish = [
+  "jupyter",
+  "notebook",
+  "numpy",
+  "networkx"
+]
 lint = ["pre-commit == 4.0.1"]
 dev = ["changelist == 0.5"]
 
