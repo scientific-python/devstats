@@ -91,8 +91,11 @@ def send_query(query, query_type, headers, cursor=None):
     while retries > 0:
         try:
             response = requests.post(endpoint, json=payload, headers=headers)
-        except requests.exceptions.ChunkedEncodingError as e:
-            print(f"`requests` ChunkedEncodingError: {e}; retrying.")
+        except (
+            requests.exceptions.ChunkedEncodingError,
+            requests.exceptions.ConnectionError,
+        ) as e:
+            print(f"`requests` error: {e}; retrying.")
             retries -= 1
         else:
             data = json.loads(response.content)
