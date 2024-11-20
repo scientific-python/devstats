@@ -37,6 +37,21 @@ The command will collect information from GitHub and generate two output files i
 `packagename_issues.json`: this file contains information about issues for the repository of interest.
 `packagename_PRs.json`: this file contains information associated with pull requests for the repository of interest.
 
+## Publish command
+
+The `publish` command can be used to generate a report website, such
+as https://devstats.scientific-python.org, from the downloaded data.
+
+This functionality is still under heavy development.
+
+To try it out, first install the publishing dependencies.
+
+```
+pip install devstats[publish]
+```
+
+(or, if you cloned the repository, `pip install -e[publish]`.)
+
 ## Development instructions
 
 If you wish to contribute to devstats:
