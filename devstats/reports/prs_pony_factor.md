@@ -54,4 +54,5 @@ glue("{{ project }}_pony_factor", pony_factor)
 % - pony factor over time, e.g yearly bins
 
 [^master_to_main]: i.e. `master` or `main`.
+
 [^only_active]: This only includes PRs from users with an active GitHub account.
