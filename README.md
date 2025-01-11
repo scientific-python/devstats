@@ -6,6 +6,12 @@ This repository holds the `devstats` package. `devstats` is a Python command lin
 generate developer statistics and a developer statistics report for a specified
 project.
 
+## Data bundles & reports
+
+We make [regular data-bundle releases](https://github.com/scientific-python/devstats-data/releases) for several key scientific Python projects.
+
+We also build reports for this data, available at https://devstats.scientific-python.org
+
 ## OAuth key for accessing GitHub
 
 Per the [GitHub GraphQL API docs](https://developer.github.com/v4/guides/forming-calls/),

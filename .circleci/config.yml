@@ -49,9 +49,7 @@ jobs:
             # NOTE: bad interaction w/ blas multithreading on circleci
             export OMP_NUM_THREADS=1
             source venv/bin/activate
-            cd devstats.scientific-python.org
-            git submodule update --init
-            make html
+            (cd devstats.scientific-python.org && make html)
 
       - store_artifacts:
           path: devstats.scientific-python.org/_build/html
