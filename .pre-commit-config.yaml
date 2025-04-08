@@ -3,7 +3,7 @@
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c # frozen: v4.6.0
+    rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b # frozen: v5.0.0
     hooks:
       - id: check-added-large-files
       - id: check-ast
@@ -26,14 +26,14 @@ repos:
         args: [--prose-wrap=preserve]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 1dc9eb131c2ea4816c708e4d85820d2cc8542683 # frozen: v0.5.0
+    rev: 971923581912ef60a6b70dbf0c3e9a39563c9d47 # frozen: v0.11.4
     hooks:
       - id: ruff
         args: ["--fix", "--show-fixes", "--exit-non-zero-on-fix"]
       - id: ruff-format
 
   - repo: https://github.com/codespell-project/codespell
-    rev: "193cd7d27cd571f79358af09a8fb8997e54f8fff" # frozen: v2.3.0
+    rev: "63c8f8312b7559622c0d82815639671ae42132ac" # frozen: v2.4.1
     hooks:
       - id: codespell
 
