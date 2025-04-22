@@ -46,7 +46,7 @@ ax.hlines(
 )
 ax.legend();
 
-glue("{{ project }}_pony_factor", pony_factor)
+glue("{{ project }}_pony_factor", str(pony_factor))
 ```
 
 % TODO: Add:
