@@ -7,8 +7,8 @@ tags: [hide-input]
 # Remove issues that are less than a day old for the following analysis
 newly_created_day_old = [
     iss for iss in newly_created
-    if np.datetime64(datetime.datetime.now()) - np.datetime64(iss["createdAt"])
-    > np.timedelta64(1, "D")
+    if (np.datetime64(datetime.datetime.now())
+        - np.datetime64(iss["createdAt"].rstrip("Z"))) > np.timedelta64(1, "D")
 ]
 
 # TODO: really need pandas here
@@ -28,7 +28,8 @@ for iss in commented_issues:
                 # This can happen e.g. when a user deletes their GH acct
                 user = "UNKNOWN"
             first_commenters.append(user)
-            dt = np.datetime64(e["node"]["createdAt"]) - np.datetime64(iss["createdAt"])
+            dt = (np.datetime64(e["node"]["createdAt"]).rstrip("Z")
+                  - np.datetime64(iss["createdAt"]).rstrip("Z"))
             time_to_first_comment.append(dt.astype("m8[m]"))
             break  # Only want the first commenter
 time_to_first_comment = np.array(time_to_first_comment)  # in minutes
