@@ -9,8 +9,17 @@ query {
           state
           title
           createdAt
+          updatedAt
+          closedAt
           baseRefName
           mergeable
+          labels(first: 25) {
+            edges {
+              node {
+                name
+              }
+            }
+          }
           author{
             login
           }

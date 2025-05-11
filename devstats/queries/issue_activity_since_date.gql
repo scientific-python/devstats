@@ -8,10 +8,16 @@ query {
           number
           title
           createdAt
-          state
-          closedAt
           updatedAt
+          closedAt
+          state
           url
+          reactionGroups {
+            content
+              users {
+            totalCount
+                  }
+          }
           labels(first: 100) {
             edges {
               node {
