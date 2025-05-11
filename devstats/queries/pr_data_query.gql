@@ -13,7 +13,7 @@ query {
           closedAt
           baseRefName
           mergeable
-          labels(first: 25) {
+          labels(first: 100) {
             edges {
               node {
                 name
