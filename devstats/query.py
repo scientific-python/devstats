@@ -3,7 +3,7 @@ import time
 
 import requests
 
-endpoint = r"https://api.github.com/graphql"
+ENDPOINT = r"https://api.github.com/graphql"
 
 
 def load_query_from_file(fname, repo_owner="numpy", repo_name="numpy"):
@@ -72,10 +72,10 @@ def send_query(query, query_type, headers, cursor=None):
     This is intended mostly for internal use within `get_all_responses`.
     """
     # TODO: Expand this, either by parsing the query type from the query
-    # directly or manually adding more query_types to the set
-    if query_type not in {"issues", "pullRequests"}:
+    # Directly or manually adding more query_types to the set
+    if query_type not in {"issues", "pullRequests", "stargazerCount"}:
         raise ValueError(
-            "Only 'issues' and 'pullRequests' queries are currently supported"
+            "Only 'issues', 'pullRequests' and 'stargazerCount' queries are currently supported"
         )
     # TODO: Generalize this
     # WARNING: The cursor injection depends on the specific structure of the
@@ -91,7 +91,7 @@ def send_query(query, query_type, headers, cursor=None):
     retries = max_retries
     while retries > 0:
         try:
-            response = requests.post(endpoint, json=payload, headers=headers)
+            response = requests.post(ENDPOINT, json=payload, headers=headers)
         except (
             requests.exceptions.ChunkedEncodingError,
             requests.exceptions.ConnectionError,
@@ -138,7 +138,15 @@ def get_all_responses(query, query_type, headers):
         print("Fetching...", end="", flush=True)
         rdata = send_query(query, query_type, headers, cursor=last_cursor)
         try:
-            pdata, last_cursor, total_count = parse_single_query(rdata, query_type)
+            # TODO: Generalize this
+            if query_type == "stargazerCount":
+                # Special case for stargazerCount
+                pdata = [{"stargazerCount":rdata["data"]["repository"]["stargazerCount"]}]
+                last_cursor = None
+                total_count = 1
+            else:
+                # Normal case for issues/PRs
+                pdata, last_cursor, total_count = parse_single_query(rdata, query_type)
         except (KeyError, TypeError):
             print("Malformed response; repeating request after 1 minute")
             time.sleep(1 * 60)

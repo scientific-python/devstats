@@ -1,0 +1,5 @@
+query {
+  repository(owner: "_REPO_OWNER_", name: "_REPO_NAME_") {
+    stargazerCount
+  }
+}

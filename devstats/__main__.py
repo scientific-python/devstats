@@ -45,7 +45,7 @@ def query(repo_owner, repo_name, outdir):
         sys.exit()
 
     headers = {"Authorization": f"bearer {token}"}
-    query_files = glob(os.path.join(os.path.dirname(__file__), "queries/*.gql"))
+    query_files = sorted(glob(os.path.join(os.path.dirname(__file__), "queries/*.gql")))
 
     for n, query in enumerate(query_files):
         if n != 0:
@@ -55,7 +55,7 @@ def query(repo_owner, repo_name, outdir):
         # Parse query type from gql
         gql = open(query).read()
         qtype_match = re.match(
-            r"query\s*{\s*repository\(.*?\)\s*{\s*(pullRequests|issues)",
+            r"query\s*{\s*repository\(.*?\)\s*{\s*(pullRequests|issues|stargazerCount)",
             gql,
             flags=re.MULTILINE,
         )
@@ -65,7 +65,6 @@ def query(repo_owner, repo_name, outdir):
         else:
             qtype = qtype_match.group(1)
 
-        qname, qext = os.path.splitext(query)
         data = GithubGrabber(
             query,
             qtype,
@@ -74,7 +73,7 @@ def query(repo_owner, repo_name, outdir):
             repo_name=repo_name,
         )
         data.get()
-        ftype = {"issues": "issues", "pullRequests": "PRs"}
+        ftype = {"issues": "issues", "pullRequests": "PRs", "stargazerCount": "stars"}
         data.dump(f"{outdir}/{repo_name}_{ftype.get(qtype, qtype)}.json")
 
 
