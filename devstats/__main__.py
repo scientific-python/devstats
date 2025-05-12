@@ -37,7 +37,14 @@ def cli():
     help="Output directory",
     show_default=True,
 )
-def query(repo_owner, repo_name, outdir):
+@click.option(
+    "-d",
+    "--start-date",
+    default="2020-01-01T00:00:00Z",
+    help="Start date for query",
+    show_default=True,
+)
+def query(repo_owner, repo_name, outdir, start_date):
     """Download and save issue and pr data for `repo_owner`/`repo_name`"""
     os.makedirs(outdir, exist_ok=True)
 
@@ -46,8 +53,6 @@ def query(repo_owner, repo_name, outdir):
     except KeyError:
         print("You need to set GRAPH_API_KEY")
         sys.exit()
-
-    start_date = "2020-01-01T00:00:00Z"
 
     headers = {"Authorization": f"bearer {token}"}
     query_files = glob(os.path.join(os.path.dirname(__file__), "queries/*.gql"))
