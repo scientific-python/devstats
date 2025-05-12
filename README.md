@@ -53,10 +53,10 @@ This functionality is still under heavy development.
 To try it out, first install the publishing dependencies.
 
 ```
-pip install devstats[publish]
+pip install "devstats[publish]"
 ```
 
-(or, if you cloned the repository, `pip install -e[publish]`.)
+(or, if you cloned the repository, `pip install -e ".[publish]"`.)
 
 ## Development instructions
 
