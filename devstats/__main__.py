@@ -1,4 +1,5 @@
 import collections
+import datetime
 import json
 import os
 import re
@@ -36,7 +37,14 @@ def cli():
     help="Output directory",
     show_default=True,
 )
-def query(repo_owner, repo_name, outdir):
+@click.option(
+    "-d",
+    "--start-date",
+    default="2020-01-01T00:00:00Z",
+    help="Start date for query",
+    show_default=True,
+)
+def query(repo_owner, repo_name, outdir, start_date):
     """Download and save issue and pr data for `repo_owner`/`repo_name`"""
     os.makedirs(outdir, exist_ok=True)
 
@@ -74,6 +82,7 @@ def query(repo_owner, repo_name, outdir):
             headers,
             repo_owner=repo_owner,
             repo_name=repo_name,
+            start_date=start_date,
         )
         data.get()
         ftype = {"issues": "issues", "pullRequests": "PRs"}
@@ -91,17 +100,21 @@ def query(repo_owner, repo_name, outdir):
 
     if response.status_code == 200:
         stargazers = response.json()
-        with open(f"{outdir}/{repo_name}_stars.json", "w") as outf:
-            simplified = [
-                {"starred_at": user["starred_at"], "login": user["user"]["login"]}
-                for user in stargazers
-            ]
-            json.dump(simplified, outf)
     else:
         print(
             "Request failed for collecting start with status code "
             f"{response.status_code}"
         )
+
+    with open(f"{outdir}/{repo_name}_misc.json", "w") as outf:
+        misc_data = {}
+        misc_data["query_start_date"] = start_date
+        misc_data["query_end_date"] = str(datetime.datetime.now())
+        misc_data["repo_stars"] = [
+            {"starred_at": user["starred_at"], "login": user["user"]["login"]}
+            for user in stargazers
+        ]
+        json.dump(misc_data, outf)
 
 
 cli.add_command(template)

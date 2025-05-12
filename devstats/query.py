@@ -6,7 +6,7 @@ import requests
 endpoint = r"https://api.github.com/graphql"
 
 
-def load_query_from_file(fname, repo_owner="numpy", repo_name="numpy"):
+def load_query_from_file(fname, repo_owner, repo_name, start_date):
     """
     Load an 'issue' query from file and set the target repository, where
     the target repository has the format:
@@ -39,6 +39,7 @@ def load_query_from_file(fname, repo_owner="numpy", repo_name="numpy"):
         # Set target repo from template
         query = query.replace("_REPO_OWNER_", repo_owner)
         query = query.replace("_REPO_NAME_", repo_name)
+        query = query.replace("_START_DATE_", start_date)
     return query
 
 
@@ -178,7 +179,7 @@ class GithubGrabber:
     """
 
     def __init__(
-        self, query_fname, query_type, headers, repo_owner="numpy", repo_name="numpy"
+        self, query_fname, query_type, headers, repo_owner, repo_name, start_date
     ):
         """
         Create an object to send/recv queries related to the issue tracker
@@ -206,11 +207,15 @@ class GithubGrabber:
         self.repo_owner = repo_owner
         self.repo_name = repo_name
         self.raw_data = None
+        self.start_date = start_date
         self.load_query()
 
     def load_query(self):
         self.query = load_query_from_file(
-            self.query_fname, self.repo_owner, self.repo_name
+            self.query_fname,
+            self.repo_owner,
+            self.repo_name,
+            start_date=self.start_date,
         )
 
     def get(self):
