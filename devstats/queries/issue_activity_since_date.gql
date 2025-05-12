@@ -1,6 +1,6 @@
 query {
   repository(owner: "_REPO_OWNER_", name: "_REPO_NAME_") {
-    issues(first: 100, filterBy: {since: "2020-01-01T00:00:00Z"}) {
+    issues(first: 100, filterBy: { since: "2020-01-01T00:00:00Z" }) {
       totalCount
       edges {
         cursor
@@ -8,10 +8,16 @@ query {
           number
           title
           createdAt
-          state
-          closedAt
           updatedAt
+          closedAt
+          state
           url
+          reactionGroups {
+            content
+            users {
+              totalCount
+            }
+          }
           labels(first: 100) {
             edges {
               node {
@@ -19,7 +25,10 @@ query {
               }
             }
           }
-          timelineItems(first: 100, itemTypes: [CROSS_REFERENCED_EVENT, ISSUE_COMMENT, CLOSED_EVENT]) {
+          timelineItems(
+            first: 100
+            itemTypes: [CROSS_REFERENCED_EVENT, ISSUE_COMMENT, CLOSED_EVENT]
+          ) {
             totalCount
             edges {
               node {
