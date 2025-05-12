@@ -31,7 +31,7 @@ publish = [
   "numpy",
   "networkx"
 ]
-lint = ["pre-commit == 4.0.1"]
+lint = ["pre-commit == 4.2.0"]
 dev = ["changelist == 0.5"]
 
 [project.urls]

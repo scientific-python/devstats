@@ -8,13 +8,14 @@ tags: [hide-input]
 ---
 
 newly_created = [
-    iss for iss in issues if np.datetime64(iss["createdAt"]) > query_date
+    iss for iss in issues if np.datetime64(iss["createdAt"].rstrip("Z")) > query_date
 ]
 new_issues_closed = [iss for iss in newly_created if iss["state"] == "CLOSED"]
 
 new_issue_lifetime = np.array(
     [
-        np.datetime64(iss["closedAt"]) - np.datetime64(iss["createdAt"])
+        (np.datetime64(iss["closedAt"].rstrip("Z"))
+         - np.datetime64(iss["createdAt"].rstrip("Z")))
         for iss in new_issues_closed
     ],
 ).astype("m8[h]")  # in hours

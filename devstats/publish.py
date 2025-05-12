@@ -87,7 +87,7 @@ def publish(project, templatedir, outdir):
                 flags=re.MULTILINE,
             )
 
-            for v in variables:
-                template = template.replace("{{ " + v + " }}", variables[v])
+            for key, value in variables.items():
+                template = template.replace("{{ " + key + " }}", value)
 
             fh.write(template)

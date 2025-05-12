@@ -87,7 +87,8 @@ def send_query(query, query_type, headers, cursor=None):
     # Build request payload
     payload = {"query": "".join(query.split("\n"))}
 
-    retries = 10
+    max_retries = 10
+    retries = max_retries
     while retries > 0:
         try:
             response = requests.post(endpoint, json=payload, headers=headers)
@@ -95,7 +96,8 @@ def send_query(query, query_type, headers, cursor=None):
             requests.exceptions.ChunkedEncodingError,
             requests.exceptions.ConnectionError,
         ) as e:
-            print(f"`requests` error: {e}; retrying.")
+            print(f"`requests` error: {e}; retrying after 1 minute.")
+            time.sleep(1 * 60)
             retries -= 1
         else:
             data = json.loads(response.content)
@@ -105,9 +107,17 @@ def send_query(query, query_type, headers, cursor=None):
                 retries -= 1
             else:
                 # Success
-                retries = 0
+                retries = -1
 
-    rate_limit = {h: response.headers[h] for h in ("x-ratelimit-remaining",)}
+    if retries == 0:
+        msg = f"Could not fetch data after {max_retries} attempts. Aborting."
+        raise SystemExit(msg)
+
+    rate_limit = {
+        h: response.headers[h]
+        for h in ("x-ratelimit-remaining",)
+        if h in response.headers
+    }
     return {**data, **rate_limit}
 
 
@@ -129,8 +139,9 @@ def get_all_responses(query, query_type, headers):
         rdata = send_query(query, query_type, headers, cursor=last_cursor)
         try:
             pdata, last_cursor, total_count = parse_single_query(rdata, query_type)
-        except KeyError:
-            print("Malformed response; repeating request")
+        except (KeyError, TypeError):
+            print("Malformed response; repeating request after 1 minute")
+            time.sleep(1 * 60)
             continue
         data.extend(pdata)
         ratelimit_remaining = int(rdata["x-ratelimit-remaining"])
@@ -155,7 +166,7 @@ def parse_single_query(data, query_type):
         total_count = data["data"]["repository"][query_type]["totalCount"]
         data = data["data"]["repository"][query_type]["edges"]
         last_cursor = data[-1]["cursor"]
-    except KeyError as e:
+    except (KeyError, TypeError) as e:
         print(f"Error parsing response: {data}")
         raise e
     return data, last_cursor, total_count
