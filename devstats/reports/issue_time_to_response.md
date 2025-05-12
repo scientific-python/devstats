@@ -28,8 +28,8 @@ for iss in commented_issues:
                 # This can happen e.g. when a user deletes their GH acct
                 user = "UNKNOWN"
             first_commenters.append(user)
-            dt = (np.datetime64(e["node"]["createdAt"]).rstrip("Z")
-                  - np.datetime64(iss["createdAt"]).rstrip("Z"))
+            dt = (np.datetime64(e["node"]["createdAt"].rstrip("Z"))
+                  - np.datetime64(iss["createdAt"].rstrip("Z")))
             time_to_first_comment.append(dt.astype("m8[m]"))
             break  # Only want the first commenter
 time_to_first_comment = np.array(time_to_first_comment)  # in minutes
