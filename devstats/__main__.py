@@ -1,10 +1,12 @@
 import collections
+import json
 import os
 import re
 import sys
 from glob import glob
 
 import click
+import requests
 
 from .publish import publish, template
 from .query import GithubGrabber
@@ -76,6 +78,30 @@ def query(repo_owner, repo_name, outdir):
         data.get()
         ftype = {"issues": "issues", "pullRequests": "PRs"}
         data.dump(f"{outdir}/{repo_name}_{ftype.get(qtype, qtype)}.json")
+
+    # get stars over time
+    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/stargazers"
+    headers = {
+        "Accept": "application/vnd.github.v3.star+json",
+        "Authorization": f"Bearer {token}",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        stargazers = response.json()
+        with open(f"{outdir}/{repo_name}_stars.json", "w") as outf:
+            simplified = [
+                {"starred_at": user["starred_at"], "login": user["user"]["login"]}
+                for user in stargazers
+            ]
+            json.dump(simplified, outf)
+    else:
+        print(
+            "Request failed for collecting start with status code "
+            f"{response.status_code}"
+        )
 
 
 cli.add_command(template)
