@@ -108,6 +108,8 @@ def query(repo_owner, repo_name, outdir, start_date):
 
     with open(f"{outdir}/{repo_name}_misc.json", "w") as outf:
         misc_data = {}
+        misc_data["repo_owner"] = repo_owner
+        misc_data["repo_name"] = repo_name
         misc_data["query_start_date"] = start_date
         misc_data["query_end_date"] = str(datetime.datetime.now())
         misc_data["repo_stars"] = [
