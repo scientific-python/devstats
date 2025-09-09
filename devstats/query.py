@@ -1,4 +1,5 @@
 import json
+import sys
 import time
 
 import requests
@@ -174,6 +175,13 @@ def parse_single_query(data, query_type):
         data = data["data"]["repository"][query_type]["edges"]
         last_cursor = data[-1]["cursor"]
     except (KeyError, TypeError) as e:
+        if "errors" in data:
+            errors = data["errors"]
+            if errors:
+                print("GitHub error:", errors[0]["message"])
+                if errors[0]["type"] == "FORBIDDEN":
+                    print("Fatal: incorrect permissions; exiting")
+                    sys.exit(1)
         print(f"Error parsing response: {data}")
         raise e
     return data, last_cursor, total_count
