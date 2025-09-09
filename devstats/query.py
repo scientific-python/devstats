@@ -101,7 +101,12 @@ def send_query(query, query_type, headers, cursor=None):
             time.sleep(1 * 60)
             retries -= 1
         else:
-            data = json.loads(response.content)
+            try:
+                data = json.loads(response.content)
+            except json.decoder.JSONDecodeError as e:
+                print(f"Invalid JSON received: {e}; retrying")
+                print("Raw content:", response.content)
+                retries -= 1
             if "exceeded a secondary rate limit" in data.get("message", ""):
                 print("GitHub secondary rate limit exceeded; retrying after 2mins")
                 time.sleep(2 * 60)
