@@ -75,7 +75,6 @@ def query(repo_owner, repo_name, outdir, start_date):
         else:
             qtype = qtype_match.group(1)
 
-        qname, qext = os.path.splitext(query)
         data = GithubGrabber(
             query,
             qtype,
